@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Debit.Migrations
 {
-    public partial class init : Migration
+    public partial class debit1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,21 +45,22 @@ namespace Debit.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Debits",
+                name: "DebitCustomer",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Items = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Money = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Status = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                    Status = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Debits", x => x.Id);
+                    table.PrimaryKey("PK_DebitCustomer", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Debits_Customers_CustomerId",
+                        name: "FK_DebitCustomer_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
@@ -80,9 +81,9 @@ namespace Debit.Migrations
                 {
                     table.PrimaryKey("PK_Accumulates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Accumulates_Debits_DebitId",
+                        name: "FK_Accumulates_DebitCustomer_DebitId",
                         column: x => x.DebitId,
-                        principalTable: "Debits",
+                        principalTable: "DebitCustomer",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -94,8 +95,8 @@ namespace Debit.Migrations
                 column: "DebitId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Debits_CustomerId",
-                table: "Debits",
+                name: "IX_DebitCustomer_CustomerId",
+                table: "DebitCustomer",
                 column: "CustomerId");
         }
 
@@ -108,7 +109,7 @@ namespace Debit.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Debits");
+                name: "DebitCustomer");
 
             migrationBuilder.DropTable(
                 name: "Customers");

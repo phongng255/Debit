@@ -8,10 +8,10 @@ namespace Debit.Models
         public Guid Id { get; set; }
         [Required]
         [MaxLength(255)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [Required]
         [MaxLength(255)]
-        public string PassworhHash { get; set; }
+        public string? PassworhHash { get; set; }
 
     }
 }

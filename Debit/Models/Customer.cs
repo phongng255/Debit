@@ -8,13 +8,13 @@ namespace Debit.Models
         public Guid Id { get; set; }
         [Required]
         [MaxLength(255)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
         [MaxLength(11)]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
-        public ICollection<Debit> Debits { get; set; }
+        public virtual ICollection<DebitCustomer>? Debits { get; set; }
 
     }
 }

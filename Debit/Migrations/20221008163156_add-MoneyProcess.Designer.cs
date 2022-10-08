@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Debit.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221007153314_fix-debit-class")]
-    partial class fixdebitclass
+    [Migration("20221008163156_add-MoneyProcess")]
+    partial class addMoneyProcess
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,7 +33,8 @@ namespace Debit.Migrations
                     b.Property<Guid>("DebitId")
                         .HasColumnType("char(36)");
 
-                    b.Property<decimal>("Money")
+                    b.Property<decimal?>("Money")
+                        .IsRequired()
                         .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
@@ -64,7 +65,7 @@ namespace Debit.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Debit.Models.Debit", b =>
+            modelBuilder.Entity("Debit.Models.DebitCustomer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,7 +77,17 @@ namespace Debit.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("char(36)");
 
+                    b.Property<DateTime?>("DateComplete")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Items")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<decimal>("Money")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("ProcessMoney")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<bool>("Status")
@@ -86,7 +97,7 @@ namespace Debit.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Debits");
+                    b.ToTable("DebitCustomer");
                 });
 
             modelBuilder.Entity("Debit.Models.User", b =>
@@ -112,7 +123,7 @@ namespace Debit.Migrations
 
             modelBuilder.Entity("Debit.Models.Accumulate", b =>
                 {
-                    b.HasOne("Debit.Models.Debit", "Debit")
+                    b.HasOne("Debit.Models.DebitCustomer", "Debit")
                         .WithMany("Accumulates")
                         .HasForeignKey("DebitId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -121,7 +132,7 @@ namespace Debit.Migrations
                     b.Navigation("Debit");
                 });
 
-            modelBuilder.Entity("Debit.Models.Debit", b =>
+            modelBuilder.Entity("Debit.Models.DebitCustomer", b =>
                 {
                     b.HasOne("Debit.Models.Customer", "Customer")
                         .WithMany("Debits")
@@ -137,7 +148,7 @@ namespace Debit.Migrations
                     b.Navigation("Debits");
                 });
 
-            modelBuilder.Entity("Debit.Models.Debit", b =>
+            modelBuilder.Entity("Debit.Models.DebitCustomer", b =>
                 {
                     b.Navigation("Accumulates");
                 });

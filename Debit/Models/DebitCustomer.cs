@@ -2,7 +2,7 @@
 
 namespace Debit.Models
 {
-    public class Debit
+    public class DebitCustomer
     {
         [Key]
         public Guid Id { get; set; }
@@ -11,13 +11,19 @@ namespace Debit.Models
         public Guid CustomerId { get; set; }
 
         [Required]
+        public string Items { get; set; }
+
+        [Required]
         public decimal Money { get; set; }
+        public decimal ProcessMoney { get; set; } = 0;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public DateTime DateComplete { get; set; }
 
         [Required]
         public bool Status { get; set; } = false;
 
-        public ICollection<Accumulate> Accumulates { get; set; }
-        public Customer Customer { get; set; }
+        public virtual ICollection<Accumulate>? Accumulates { get; set; }
+        public virtual Customer? Customer { get; set; }
     }
 }

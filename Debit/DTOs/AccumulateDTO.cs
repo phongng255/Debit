@@ -2,16 +2,15 @@
 
 namespace Debit.Models
 {
-    public class Accumulate
+    public class AccumulateDTO
     {
-        [Key]
         public Guid Id { get; set; }
         [Required]
         public Guid DebitId { get; set; }
         [Required]
         public decimal? Money { get; set; }
         [Required]
-        public DateTime CreatedAt { get; set; }=DateTime.Now;
-        public virtual DebitCustomer? Debit { get; set; }
+        public DateTime CreatedAt { get; set; }
+        
     }
 }
