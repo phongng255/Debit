@@ -8,8 +8,8 @@ namespace Debit.Entities
 {
     public class Login
     {
-        [Required(ErrorMessage = "The email is required")]
-        public string UserName { get; set; }
+        [Required(ErrorMessage = "The Phone is required")]
+        public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "The password is required")]
         public string Password { get; set; }
@@ -17,9 +17,9 @@ namespace Debit.Entities
         //{
 
         //}
-        public Login(string Email, string Password)
+        public Login(string PhoneNumber, string Password)
         {
-            this.UserName = Email;
+            this.PhoneNumber = PhoneNumber;
             this.Password = Password;
         }
     }

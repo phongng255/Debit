@@ -60,7 +60,7 @@ namespace Debit.Controllers
         [Route("GetDateNow")]
         public async Task<ActionResult> GetDateNow(DateTime date)
         {
-            var accumulate = await dbContext.Accumulates.Where(x => x.CreatedAt.Date == date.Date).ToListAsync();
+            var accumulate = await dbContext.Accumulates.Where(x => x.CreatedAt.Date == date.Date).Include(x=>x.Debit).Include(x=>x.Debit.Customer).ToListAsync();
             var accumulateDTO = mapper.Map<List<AccumulateDTO>>(accumulate);
             return Ok(accumulateDTO);
         }

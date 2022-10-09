@@ -6,9 +6,10 @@ namespace Debit.Models
     {
         [Key]
         public Guid Id { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Hóa đơn góp không được để trống")]
         public Guid DebitId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Số tiền không được để trống")]
         public decimal? Money { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }=DateTime.Now;

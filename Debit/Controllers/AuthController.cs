@@ -27,10 +27,10 @@ namespace Debit.Controllers
             // Verify account
             if (dbContext.Users != null)
             {
-                var user = dbContext.Users.FirstOrDefault(x => x.Name == login.UserName);
+                var user = dbContext.Users.FirstOrDefault(x => x.PhoneNumber == login.PhoneNumber);
                 if (user == null)
                 {
-                    return BadRequest(new { message = "Tài khoản không tồn tại!" });
+                    return BadRequest(new { message = "Số Điện Thoại không tồn tại!" });
                 }
                 else
                 {

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Debit.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221008163156_add-MoneyProcess")]
-    partial class addMoneyProcess
+    [Migration("20221009061614_add-phonenumberCustomer")]
+    partial class addphonenumberCustomer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,6 +62,9 @@ namespace Debit.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
                     b.ToTable("Customers");
                 });
 
@@ -77,7 +80,7 @@ namespace Debit.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime?>("DateComplete")
+                    b.Property<DateTime>("DateComplete")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Items")
@@ -106,17 +109,20 @@ namespace Debit.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("PassworhHash")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
