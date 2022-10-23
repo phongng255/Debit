@@ -29,18 +29,18 @@ namespace Debit.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(string Name,string PhoneNumber)
+        public async Task<ActionResult> Post([FromBody] CustomerDeBitDTO CustomerDeBitDTO)
         {
-            if(!IsValidPhoneNumber(PhoneNumber))
+            if(!IsValidPhoneNumber(CustomerDeBitDTO.PhoneNumber))
             {
                 return BadRequest(new { message = "Số diện thoại không đúng định dạng" });
             }    
-            else if (CheckCustomer(Name, PhoneNumber))
+            else if (CheckCustomer(CustomerDeBitDTO.Name, CustomerDeBitDTO.PhoneNumber))
             {
                 Customer customer = new Customer();
                 customer.Id = Guid.NewGuid();
-                customer.Name = Name;
-                customer.PhoneNumber = PhoneNumber;
+                customer.Name = CustomerDeBitDTO.Name;
+                customer.PhoneNumber = CustomerDeBitDTO.PhoneNumber;
                 await dbContext.Customers.AddAsync(customer);
                 await dbContext.SaveChangesAsync();
                 return Ok(customer);
@@ -68,13 +68,51 @@ namespace Debit.Controllers
 
         [HttpGet]
         [Route("GetAllCustomer")]
-        public async Task<ActionResult<List<CustomerDTO>>> GetAllCustomer()
+        public async Task<ActionResult<List<CustomerDeBitDTO>>> GetAllCustomer()
         {
             List<Customer> customer = await dbContext.Customers.ToListAsync();
-            var listCustomer = mapper.Map<List<CustomerDTO>>(customer);
+            var listCustomer = mapper.Map<List<CustomerDeBitDTO>>(customer);
             return Ok(listCustomer);
         }
+        [HttpPost]
+        [Route("GetAllCustomerDataTable")]
+        public async Task<ActionResult<List<CustomerDeBitDTO>>> GetAllCustomerDataTable(DataTableDTO dataTable)
+        {
+            var column = dataTable.Order.First().Column == 0 ? "name"
+                         : "phoneNumber";
+            var sort = dataTable.Order.First().Dir;
+            List<Customer> customer = await dbContext.Customers.ToListAsync();
+            if (dataTable.Search.Value != "")
+            {
+                customer = customer.Where
+                    (x =>
+                       x.Name.ToLower().Contains(dataTable.Search.Value.ToLower())
+                       || x.PhoneNumber.Contains(dataTable.Search.Value)
+                    ).ToList();
+            }
+            customer = Orderby(customer,column,sort);
+            var listCustomer = mapper.Map<List<CustomerDeBitDTO>>(customer.Skip(dataTable.Start).Take(dataTable.Length));
+            var total = await dbContext.Customers.CountAsync();
+            DTData data = new DTData() { Data = listCustomer, Draw = dataTable.Draw, RecordsTotal = total, RecordsFiltered = total };
+            return Ok(data);
+        }
 
-        
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public List<Customer> Orderby(List<Customer> customers, string column, string sort)
+        {
+            if (sort == "desc")
+            {
+                customers = column == "name" ? customers.OrderByDescending(x => x.Name).ToList() :
+                             customers.OrderByDescending(x => x.PhoneNumber).ToList();
+            }
+            else
+            {
+                customers = column == "name" ? customers.OrderBy(x => x.Name).ToList() :
+                             customers.OrderBy(x => x.PhoneNumber).ToList();
+            }
+            return customers;
+        }
+
+
     }
 }

@@ -77,7 +77,7 @@ builder.Services.AddAuthentication(auth =>
 });
 builder.Services.AddCors(options =>
 {
-    string host = builder.Configuration["CORSConfig:AllowedHosts"];
+    var host = builder.Configuration["CORSConfig:AllowedHosts"].Split(";"); 
     options.AddPolicy("CorsPolicy",
         builder => builder.WithOrigins(host)
         .AllowAnyMethod()
@@ -86,6 +86,9 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+
 
 
 
@@ -108,10 +111,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseCors("CorsPolicy");
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
-
 
 app.Run();

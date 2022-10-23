@@ -16,6 +16,9 @@ RUN dotnet build "Debit.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "Debit.csproj" -c Release -o /app/publish
 
+RUN apt update && apt install tzdata -y
+ENV TZ="Asia/Ho_Chi_Minh"
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .

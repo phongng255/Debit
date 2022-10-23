@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Debit.DTOs
 {
-    public class DebitDTO
+    public class CreateDebit
     {
         [SwaggerSchema(ReadOnly = true)]
         public Guid Id { get; set; }
@@ -12,7 +12,7 @@ namespace Debit.DTOs
         public Guid CustomerId { get; set; }
 
         [Required(ErrorMessage = "Tên Sản phẩm không để trống")]
-        public string Items { get; set; }   
+        public string Items { get; set; }
 
         [Required(ErrorMessage = "Giá Khống để trống")]
         public decimal Money { get; set; }
@@ -28,7 +28,6 @@ namespace Debit.DTOs
 
         [SwaggerSchema(ReadOnly = true)]
         public bool? Status { get; set; } = false;
-
-        public CustomerDeBitDTO Customer { get; set; }
     }
+
 }
